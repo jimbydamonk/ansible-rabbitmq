@@ -1,0 +1,47 @@
+---
+- name: Install erlang packages
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - socat
+    - erlang
+    - erlang-nox
+
+- name: Check if rabbitmq is installed
+  command: rabbitmqctl status
+  register: is_installed
+  ignore_errors: True
+  changed_when: False
+
+- name: Test rabbitmq version
+  shell: "dpkg -l rabbitmq-server |tail -n 1 |awk '{print $3}'"
+  register: has_version
+  ignore_errors: True
+  when: is_installed|success
+  changed_when: False
+
+- name: Download rabbitmq deb locally
+  local_action:
+    module: get_url
+    url: "http://www.rabbitmq.com/releases/rabbitmq-server/v{{ rabbitmq_version[:-2] }}/rabbitmq-server_{{ rabbitmq_version }}_all.deb"
+    dest: /tmp
+  become: False
+  when: is_installed|failed or has_version.stout is defined and has_version.stdout != rabbitmq_version
+
+- name: Upload deb to remote system
+  copy:
+    src: "/tmp/rabbitmq-server_{{ rabbitmq_version }}_all.deb"
+    dest: /tmp
+  when: is_installed|failed or has_version.stout is defined and has_version.stdout != rabbitmq_version
+
+# TODO:  Apt is broke for debs https://github.com/ansible/ansible-modules-core/issues/3752
+# - name: Install rabbitmq deb
+#   apt:
+#     deb: "/tmp/rabbitmq-server_{{ rabbitmq_version }}_all.deb"
+#   notify: Restart rabbitmq
+#   when: is_installed|failed or has_version.stout is defined and has_version.stdout != rabbitmq_version
+
+- name: Install rabbitmq deb
+  command: " dpkg -i /tmp/rabbitmq-server_{{ rabbitmq_version }}_all.deb"
+  notify: Restart rabbitmq
+  when: is_installed|failed or has_version.stout is defined and has_version.stdout != rabbitmq_version

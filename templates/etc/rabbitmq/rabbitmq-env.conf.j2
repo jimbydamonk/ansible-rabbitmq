@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export ERLANG_COOKIE_VAL="{{ erlang_cookie_data }}"
+export SERVER_START_ARGS="-setcookie ${ERLANG_COOKIE_VAL}"
+export MNESIA_BASE="{{ mnesia_base }}"
+export NODENAME="rabbit@$( hostname -s )"
+export RABBITMQ_USE_LONGNAME="true"
+

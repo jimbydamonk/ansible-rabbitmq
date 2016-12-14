@@ -1,0 +1,35 @@
+[
+    {rabbit, [
+
+    {% if rabbitmq_reverse_dns_lookups == true %}
+         {reverse_lookups, true},
+        {% endif %}
+        {% if rabbitmq_cluster_partition_handling is defined %}
+        {cluster_partition_handling, {{ rabbitmq_cluster_partition_handling }}}
+        {% endif %}
+
+    {% if rabbitmq_ssl == true %}
+        {ssl_listeners, [{{rabbitmq_ssl_port}}]},
+        {ssl_options, [{cacertfile,"{{rabbitmq_ssl_cacert}}"},
+                    {certfile,"{{ rabbitmq_ssl_cert }}"},
+                    {keyfile,"{{ rabbitmq_ssl_key }}"},
+                    {verify,{{ rabbitmq_ssl_verify }}},
+                    {fail_if_no_peer_cert,{{ rabbitmq_ssl_fail_if_no_peer_cert }}}]}
+
+    {% endif %}
+
+    ]}
+    {% if rabbitmq_management_load_json == true %}
+        ,
+        {rabbitmq_management, [
+            {load_definitions, "{{ rabbitmq_management_json }}"}
+        ]}
+    {% endif %}
+
+    {% if rabbitmq_clusterer == true %}
+        ,
+        {rabbitmq_clusterer,
+          [{config, "{{ rabbitmq_clusterer_config_file }}"}]
+        }
+    {% endif %}
+].

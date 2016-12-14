@@ -1,0 +1,7 @@
+{
+ "parameters": {{ rabbitmq_parameters | default([]) | to_nice_json }},
+ "permissions": {{ rabbitmq_permissions |default([]) |to_nice_json }},
+ "policies": {{ rabbitmq_policies | default([]) | to_nice_json }},
+ "users": {{ rabbitmq_users | default([]) | to_nice_json }},
+ "vhosts": {{ rabbitmq_vhosts | default([]) | to_nice_json }}
+}

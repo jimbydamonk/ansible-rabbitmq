@@ -1,0 +1,17 @@
+- name: Start rabbitmq
+  service:
+    name: rabbitmq-server
+    state: started
+    enabled: "{{ rabbitmq_service_enabled |default('yes') }}"
+
+- name: Stop rabbitmq
+  service:
+    name: rabbitmq-server
+    state: stopped
+    enabled: "{{ rabbitmq_service_enabled |default('yes') }}"
+
+- name: Restart rabbitmq
+  service:
+    name: rabbitmq-server
+    state: restarted
+    enabled: "{{ rabbitmq_service_enabled |default('yes') }}"
