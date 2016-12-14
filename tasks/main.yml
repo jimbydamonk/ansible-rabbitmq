@@ -85,7 +85,7 @@
     src: etc/rabbitmq/rabbitmq_defs.json.j2
     dest: /etc/rabbitmq/rabbitmq_defs.json
     mode: "0755"
-    owner:"" root
+    owner: root
     group: root
     backup: yes
   notify: Restart rabbitmq
