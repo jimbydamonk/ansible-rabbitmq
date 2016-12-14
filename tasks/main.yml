@@ -57,7 +57,7 @@
     dest: "{{ erlang_cookie_file }}"
     mode: 600
     owner: rabbitmq
-    group:rabbitmq
+    group: rabbitmq
     backup: yes
   notify: Restart rabbitmq
   when: erlang_cookie_control.changed
