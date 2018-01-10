@@ -1,11 +1,9 @@
 ---
-- name: Install erlang packages
+- name: Install pre-req packages
   apt:
     name: "{{ item }}"
   with_items:
     - socat
-    - erlang
-    - erlang-nox
 
 - name: Check if rabbitmq is installed
   command: rabbitmqctl status

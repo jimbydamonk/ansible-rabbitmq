@@ -17,4 +17,5 @@ galaxy_info:
     - rabbit
     - amqp
 
-dependencies: []
+dependencies:
+  - { role: kbrebanov.erlang, erlang_version: 20.2.2 }  
